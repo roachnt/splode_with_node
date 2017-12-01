@@ -13,7 +13,7 @@ var register = require('./routes/register');
 
 var app = express();
 app.use(session({secret: 'ssshhhhh'}));
-app.locals.sess;
+sess = null;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

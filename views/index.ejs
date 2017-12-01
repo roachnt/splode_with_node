@@ -61,7 +61,9 @@ href = "stylesheets/style.css" />
             <ul class="nav navbar-nav">
                 <li class="num-players-dropdown"><a href="#">Players</a></li>
                 <li class="change-graph-button"><a href="#">Graphs</a></li>
+                <% if (sess) { %>
                 <li class="change-graph-button"><a href="#"><%= sess.username %></a></li>
+                <% } %>
             </ul>
         </div>
     </div>

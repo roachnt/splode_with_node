@@ -24,13 +24,8 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/createuser', function (req, res, next) {
-    console.log(req.body.username, req.body.email);
-    var user = {
-        "username": req.body.username,
-        "email": req.body.email,
-        "password": `MD5(${req.body.password})`
-    }
-    conn.query('INSERT INTO user SET ?',user, function (err, result) {
+    var query = `INSERT INTO user VALUES ('${req.body.username}','${req.body.email}',MD5('${req.body.password}') )`;
+    conn.query(query, function (err, result) {
         if (err) {
             console.log('Could not create user!');
             console.log(err);
