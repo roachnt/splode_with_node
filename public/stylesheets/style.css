@@ -1,0 +1,42 @@
+* { margin: 0; padding: 0;}
+
+body, html { height:100%; overflow-y: hidden;}
+
+.navbar {
+  border-radius: 0;
+}
+.num-players-dropdown {
+  cursor: pointer;
+}
+
+.change-graph-button {
+  cursor: pointer;
+}
+
+.graph-selector {
+  text-align: center;
+  width: 30%;
+  height: 60%;
+  background-color: white;
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 5%;
+  border: 1px solid red;
+  transform: translateX(-400%);
+  transition: 1s;
+  margin: auto;
+}
+
+.graph-selector-open {
+  transform: translateX(0);
+}
+
+.graph-name {
+  font-size: 130%;
+  width: 100%;
+  display: block;
+  cursor: pointer;
+}
