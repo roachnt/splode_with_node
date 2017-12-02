@@ -31,24 +31,21 @@ contains: sees if a given coordinate is contained within the node
 
 */
 
-class Node
-{
+class Node {
 	// Creates an empty node with given coordinates; add itself to its neighborhood
-	constructor(x, y, r)
-	{
+	constructor(x, y, r) {
 		this.neighbors = [];
 		this.neighbors.push(this);
 		this.player = empty;
 		this.count = 0;
-		this.x=x;
-		this.y=y;
-		this.r=r;
+		this.x = x;
+		this.y = y;
+		this.r = r;
 	}
 
-	isNeighbor(node)
-	{
-		for(let neigh of this.neighbors) {
-			if(node == neigh) {
+	isNeighbor(node) {
+		for (let neigh of this.neighbors) {
+			if (node == neigh) {
 				return true;
 			}
 		}
@@ -56,38 +53,35 @@ class Node
 	}
 
 	// This is the only place where neighbors.push should be used
-	addNeighbor(node)
-	{
+	addNeighbor(node) {
 		// Check to see if node is already a neighbor
-		if(!this.isNeighbor(node)) {
+		if (!this.isNeighbor(node)) {
 			this.neighbors.push(node);
 		}
 
 		// Adds itself to node's neighborhood to keep symmetry
-		if(!node.isNeighbor(this)) {
+		if (!node.isNeighbor(this)) {
 			node.neighbors.push(this);
 		}
 	}
 
 	// This is the only place where neighbors.splice should be used
-	rmNeighbor(node)
-	{
+	rmNeighbor(node) {
 		// Removes node from it's neighbor list
-		if(this.isNeighbor(node)) {
-			this.neighbors.splice(this.neighbors.indexOf(node),1);
+		if (this.isNeighbor(node)) {
+			this.neighbors.splice(this.neighbors.indexOf(node), 1);
 		}
 
 		// Removes itself from node's neighbor list
-		if(node.isNeighbor(this)) {
-			node.neighbors.splice(node.neighbors.indexOf(this),1);
+		if (node.isNeighbor(this)) {
+			node.neighbors.splice(node.neighbors.indexOf(this), 1);
 		}
 	}
 
-	contains(xCoord, yCoord)
-	{
+	contains(xCoord, yCoord) {
 		var dx = xCoord - this.x;
 		var dy = yCoord - this.y;
-		return (Math.sqrt(dx*dx + dy*dy) <= this.r);
+		return (Math.sqrt(dx * dx + dy * dy) <= this.r);
 	}
 }
 
@@ -119,11 +113,9 @@ this class to make other graphs, choose whatever coordinates are convenient
 for you.
 
 */
-class Graph
-{
+class Graph {
 	// Feed the Graph constructor the array of players for the game
-	constructor(players)
-	{
+	constructor(players) {
 		this.nodes = [];
 		this.turnCount = 0;
 
@@ -147,34 +139,31 @@ class Graph
 		this.prev = null;
 	}
 
-	addNode(node)
-	{
+	addNode(node) {
 		this.nodes.push(node);
 	}
 
-    // Removes a node from the graph, and removes it from it's neighbors' lists
-	rmNode(node)
-	{
-		while(!(node.neighbors.size == 0)) {
+	// Removes a node from the graph, and removes it from it's neighbors' lists
+	rmNode(node) {
+		while (!(node.neighbors.size == 0)) {
 			node.rmNeighbor(node.neighbors[0]);
 		}
 	}
 
 	// Determines a buffered bounding box for the graph to be displayed.
-	determineBoundaries()
-	{
+	determineBoundaries() {
 		for (let node of this.nodes) {
-			if(this.maxX < node.x + 2*node.r) {
-				this.maxX = node.x + 2*node.r;
+			if (this.maxX < node.x + 2 * node.r) {
+				this.maxX = node.x + 2 * node.r;
 			}
-			if(this.maxY < node.y + 2*node.r) {
-				this.maxY = node.y + 2*node.r;
+			if (this.maxY < node.y + 2 * node.r) {
+				this.maxY = node.y + 2 * node.r;
 			}
-			if(this.minX > node.x - 2*node.r) {
-				this.minX = node.x - 2*node.r;
+			if (this.minX > node.x - 2 * node.r) {
+				this.minX = node.x - 2 * node.r;
 			}
-			if(this.minY > node.y - 2*node.r) {
-				this.minY = node.y - 2*node.r;
+			if (this.minY > node.y - 2 * node.r) {
+				this.minY = node.y - 2 * node.r;
 			}
 		}
 		this.width = this.maxX - this.minX;
@@ -183,11 +172,10 @@ class Graph
 
 	// Creates the edges of the graph via a geometric graph model, that is,
 	// all nodes within a certain distance of one another will be adjacent.
-	geometric(dist)
-	{
-		for(let n1 of this.nodes) {
-			for(let n2 of this.nodes) {
-				if((Math.sqrt((n1.x-n2.x)*(n1.x-n2.x) + (n1.y-n2.y)*(n1.y-n2.y)) <= dist) && n1 != n2) {
+	geometric(dist) {
+		for (let n1 of this.nodes) {
+			for (let n2 of this.nodes) {
+				if ((Math.sqrt((n1.x - n2.x) * (n1.x - n2.x) + (n1.y - n2.y) * (n1.y - n2.y)) <= dist) && n1 != n2) {
 					n1.addNeighbor(n2);
 				}
 			}
@@ -195,38 +183,36 @@ class Graph
 	}
 
 	// Sees if the splode queue is empty or not
-	stillProcessing()
-	{
-		if(this.toProcess.length == 0) {
+	stillProcessing() {
+		if (this.toProcess.length == 0) {
 			this.overflow = 0;
 		}
 		return this.toProcess.length != 0;
 	}
 
-    // This should only be called when the splode queue toProcess is nonempty.
-    // This method then takes the next node of the queue and splodes it, if
-    // possible. Returns if node was sploded or not.
-    splode()
-    {
-    	// get next node to process
-    	var current = this.toProcess.pop();
-    	this.overflow++;
-    	console.log("Overflow: " + this.overflow);
-    	console.log(current.neighbors.length);
+	// This should only be called when the splode queue toProcess is nonempty.
+	// This method then takes the next node of the queue and splodes it, if
+	// possible. Returns if node was sploded or not.
+	splode() {
+		// get next node to process
+		var current = this.toProcess.pop();
+		this.overflow++;
+		console.log("Overflow: " + this.overflow);
+		console.log(current.neighbors.length);
 		// check for winner; if so, clear queue
-		if(this.hasWinner()) {
+		if (this.hasWinner()) {
 			this.toProcess = [];
 			console.log("WINNER!");
 		}
-		if(current.neighbors.length <= current.count) {
+		if (current.neighbors.length <= current.count) {
 			console.log("HEY");
 			current.count = current.count - current.neighbors.length;
 			// increment neighbors and change their player, pushing them into
 			// the queue toProcess
 			for (let newNode of current.neighbors) {
 				newNode.count = newNode.count + 1;
-				if(newNode.player.ID != this.currPlayer.ID) {
-					if(newNode.player.ID != "empty") {
+				if (newNode.player.ID != this.currPlayer.ID) {
+					if (newNode.player.ID != "empty") {
 						newNode.player.occupancy--;
 					}
 					this.currPlayer.occupancy++;
@@ -242,31 +228,28 @@ class Graph
 
 	// Determines if there is a winner, that is, some player that occupies
 	// every node.
-	hasWinner()
-	{
-		for(let p of this.players) {
-			if(p.occupancy >= this.nodes.length)
+	hasWinner() {
+		for (let p of this.players) {
+			if (p.occupancy >= this.nodes.length)
 				return true;
 		}
 		return false;
 	}
 
 	// Determines if all the nodes have been taken
-	isFull()
-	{
+	isFull() {
 		var occupied = 0;
-		for(let p of this.players) {
+		for (let p of this.players) {
 			occupied = occupied + p.occupancy;
 		}
 		return occupied == this.nodes.length;
 	}
 
 	// Give the next turn to the next player
-	nextTurn()
-	{
-		for(let p of this.players) {
-			if(p.ID == this.currPlayer.ID) {
-				p.scores.push(p.getScore()+p.occupancy);
+	nextTurn() {
+		for (let p of this.players) {
+			if (p.ID == this.currPlayer.ID) {
+				p.scores.push(p.getScore() + p.occupancy);
 			} else {
 				p.scores.push(p.getScore());
 			}
@@ -274,39 +257,38 @@ class Graph
 			console.log(p.scores);
 		}
 		do {
-			this.currPlayer = this.players[(this.players.indexOf(this.currPlayer)+1)%this.players.length];
+			this.currPlayer = this.players[(this.players.indexOf(this.currPlayer) + 1) % this.players.length];
 			console.log(this.currPlayer.ID);
-		} while(this.currPlayer.occupancy == 0 && this.isFull());
+		} while (this.currPlayer.occupancy == 0 && this.isFull());
 	}
 
-    // Duplicates the graph to save it for the undo feature.
-    duplicate()
-    {
-    	if(this.toProcess.length == 0) {
-			var newGraph = new Graph(players);j
-			newGraph.turnCount = this.turnCount+1;
+	// Duplicates the graph to save it for the undo feature.
+	duplicate() {
+		if (this.toProcess.length == 0) {
+			var newGraph = new Graph(players); j
+			newGraph.turnCount = this.turnCount + 1;
 
-    		// Make copy of nodes
-    		var newNode;
-    		for(let node of this.nodes) {
-    			newNode = new Node(node.x, node.y, node.r);
-    			newNode.player = node.player;
-    			newNode.count = node.count;
-    			newGraph.addNode(newNode);
-    		}
+			// Make copy of nodes
+			var newNode;
+			for (let node of this.nodes) {
+				newNode = new Node(node.x, node.y, node.r);
+				newNode.player = node.player;
+				newNode.count = node.count;
+				newGraph.addNode(newNode);
+			}
 
-    		// Make copy of edges
-    		for(var i = 0; i < this.nodes.length; i++) {
-    			for(var j = 0; j < this.nodes.length; j++) {
-    				if(i != j && this.nodes[i].isNeighbor(this.nodes[j])) {
-    					newGraph.nodes[i].addNeighbor(newGraph.nodes[j]);
-    				}
-    			}
-    		}
+			// Make copy of edges
+			for (var i = 0; i < this.nodes.length; i++) {
+				for (var j = 0; j < this.nodes.length; j++) {
+					if (i != j && this.nodes[i].isNeighbor(this.nodes[j])) {
+						newGraph.nodes[i].addNeighbor(newGraph.nodes[j]);
+					}
+				}
+			}
 
-    		// Copy the player information
-    		newGraph.players = this.players;
-    		newGraph.currPlayer = this.currPlayer;
+			// Copy the player information
+			newGraph.players = this.players;
+			newGraph.currPlayer = this.currPlayer;
 
 			// The following keeps track of the graph's bounds
 			newGraph.maxX = this.maxX;
@@ -325,24 +307,22 @@ class Graph
 	}
 
 	// Use this method to move to the previous move of the game
-	undo()
-	{
+	undo() {
 		// Must set back graph before calling undo.
 
 		// Scale Back player scores and occupancy levels
-		for(let p of this.players) {
+		for (let p of this.players) {
 			p.scores.pop();
 			p.occupancy = 0;
 		}
-		for(let n of this.nodes) {
+		for (let n of this.nodes) {
 			n.player.occupancy++;
 		}
 	}
 
-	playerString()
-	{
+	playerString() {
 		var str = ""
-		for(let p of this.players) {
+		for (let p of this.players) {
 			str = str + p.name + ": " + p.getScore() + "   ";
 		}
 		return str;
@@ -357,10 +337,8 @@ a username and color, but in the future it may keep track of statistics.
 
 */
 
-class Player
-{
-	constructor(name, color, ID)
-	{
+class Player {
+	constructor(name, color, ID) {
 		this.name = name;
 		this.color = color;
 		this.ID = ID;
@@ -368,8 +346,7 @@ class Player
 		this.occupancy = 0;
 	}
 
-	getScore()
-	{
-		return this.scores[this.scores.length-1];
+	getScore() {
+		return this.scores[this.scores.length - 1];
 	}
 }

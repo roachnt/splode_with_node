@@ -16,7 +16,7 @@ conn.connect(function (err) {
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('login', {failedLogin: false});
+  res.render('login', { failedLogin: false });
 });
 
 router.post('/authenticate', function (req, res, next) {
@@ -25,10 +25,10 @@ router.post('/authenticate', function (req, res, next) {
     if (err) {
       console.log('Could not login user!');
       console.log(err);
-      res.render('login', {failedLogin: false});
+      res.render('login', { failedLogin: false });
     }
     else if (result.length == 0) {
-      res.render('login', {failedLogin: false});
+      res.render('login', { failedLogin: false });
     }
     else {
       var realPassword = result[0].password;
@@ -40,7 +40,7 @@ router.post('/authenticate', function (req, res, next) {
         sess.username = req.body.username;
         res.redirect('/');
       }
-      else res.render('login', {failedLogin: true});
+      else res.render('login', { failedLogin: true });
     }
   });
 });

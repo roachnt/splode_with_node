@@ -6,16 +6,18 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
+// Get routes
 var index = require('./routes/index');
 var users = require('./routes/users');
 var login = require('./routes/login');
 var register = require('./routes/register');
 var logout = require('./routes/logout');
 
+// Initialize app
 var app = express();
 
 // Create session
-app.use(session({secret: 'ssshhhhh'}));
+app.use(session({ secret: 'ssshhhhh' }));
 sess = null;
 
 // view engine setup
@@ -38,14 +40,14 @@ app.use('/register', register);
 app.use('/logout', logout);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

@@ -3,7 +3,7 @@ var router = express.Router();
 var mysql = require('mysql');
 var session = require('express-session');
 
-router.use(session({secret: 'ssshhhhh'}));
+router.use(session({ secret: 'ssshhhhh' }));
 
 const conn = mysql.createConnection({
     host: 'localhost',
@@ -32,7 +32,7 @@ router.post('/createuser', function (req, res, next) {
             res.render('register');
         }
         else {
-            
+
             sess = req.session;
             sess.email = req.body.email; // equivalent to $_SESSION['email'] in PHP.
             sess.username = req.body.username;
