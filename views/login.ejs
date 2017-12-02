@@ -6,7 +6,10 @@
 </head>
 
 <body>
-    <h1>This is the Login
+    <h1>This is the Login page</h1>
+        <% if (failedLogin) { %>
+            <p>Incorrect username or password</p>
+        <% } %>
         <form action="/login/authenticate" method="post">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" placeholder="Username" />

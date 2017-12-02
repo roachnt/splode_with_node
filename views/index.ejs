@@ -122,19 +122,22 @@
         draw();
 
     </script>
+
+    <!-- Socket.io functionality -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
         $(function () {
+            // Connect
             var socket = io();
+            // Pass click coordinates to server
             canvas.addEventListener('click', (e) => {
-                var evt = {clientX: e.clientX, clientY: e.clientY};
-                socket.emit('clickevent', evt);
+                var click = { clientX: e.clientX, clientY: e.clientY };
+                socket.emit('clickevent', click);
             });
-            socket.on('clickevent', function (e) {
-                clickHandler(e);
-                draw();
-            });
-            socket.on('update', function () {
+            // Receive click coordinates from server
+            socket.on('clickevent', function (click) {
+                // Draw coordinates to canvas
+                clickHandler(click);
                 draw();
             });
         });

@@ -18,15 +18,21 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
-
 var server = http.createServer(app);
+
+/**
+ * Create socket.io connection
+ */
 var io = require('socket.io')(server);
 
+/**
+ * Socket.io onnection functionality
+ */
 io.on('connection', function(socket){
-  io.emit('update');
-  socket.on('clickevent', function(e){
-    console.log('click occurred');
-    io.emit('clickevent', e);
+  // Receive click coordinates from client
+  socket.on('clickevent', function(click){
+    // Send click coordinates to client
+    io.emit('clickevent', click);
   });
 });
 
