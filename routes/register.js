@@ -32,6 +32,7 @@ router.post('/createuser', function (req, res, next) {
             res.render('register');
         }
         else {
+            
             sess = req.session;
             sess.email = req.body.email; // equivalent to $_SESSION['email'] in PHP.
             sess.username = req.body.username;

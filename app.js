@@ -13,6 +13,8 @@ var register = require('./routes/register');
 var logout = require('./routes/logout');
 
 var app = express();
+
+// Create session
 app.use(session({secret: 'ssshhhhh'}));
 sess = null;
 
@@ -28,6 +30,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Routes
 app.use('/', index);
 app.use('/users', users);
 app.use('/login', login);
