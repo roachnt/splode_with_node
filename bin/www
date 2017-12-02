@@ -18,21 +18,30 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
+
 var server = http.createServer(app);
 
 /**
  * Create socket.io connection
  */
+
 var io = require('socket.io')(server);
 
 /**
  * Socket.io onnection functionality
  */
+
 io.on('connection', function(socket){
+  console.log('Client connected!');
   // Receive click coordinates from client
   socket.on('clickevent', function(click){
     // Send click coordinates to client
     io.emit('clickevent', click);
+  });
+
+  socket.on('disconnection', function(click){
+    // Send click coordinates to client
+    console.log('Client disconnected!');
   });
 });
 

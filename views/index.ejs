@@ -74,7 +74,18 @@
                                 <%= sess.username %>
                             </a>
                         </li>
-                        <% } %>
+                        <li class="change-graph-button">
+                            <a href="/logout">
+                                Logout
+                            </a>
+                        </li>
+                        <% } else { %>
+                        <li class="change-graph-button">
+                            <a href="/login">
+                                Login
+                            </a>
+                        </li>
+                    <% } %>
                 </ul>
             </div>
         </div>
@@ -129,6 +140,7 @@
         $(function () {
             // Connect
             var socket = io();
+            console.log('Client connected!')
             // Pass click coordinates to server
             canvas.addEventListener('click', (e) => {
                 var click = { clientX: e.clientX, clientY: e.clientY };
