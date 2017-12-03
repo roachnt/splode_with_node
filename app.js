@@ -8,7 +8,6 @@ var session = require('express-session');
 
 // Get routes
 var index = require('./routes/index');
-var users = require('./routes/users');
 var login = require('./routes/login');
 var register = require('./routes/register');
 var logout = require('./routes/logout');
@@ -35,7 +34,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/', index);
-app.use('/users', users);
 app.use('/login', login);
 app.use('/register', register);
 app.use('/logout', logout);

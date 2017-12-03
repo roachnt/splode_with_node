@@ -3,8 +3,7 @@ var router = express.Router();
 var mysql = require('mysql');
 var session = require('express-session');
 
-router.use(session({ secret: 'ssshhhhh' }));
-
+// Connect to database
 const conn = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -12,18 +11,14 @@ const conn = mysql.createConnection({
     database: 'nodesplosion',
 });
 
-conn.connect(function (err) {
-    if (err) throw err;
-    console.log("Connected!");
-});
-
-
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.render('register');
 });
 
+/* POST register new user */
 router.post('/createuser', function (req, res, next) {
+    // Attempt insertion into user table
     var query = `INSERT INTO user VALUES ('${req.body.username}','${req.body.email}',MD5('${req.body.password}') )`;
     conn.query(query, function (err, result) {
         if (err) {
@@ -32,9 +27,9 @@ router.post('/createuser', function (req, res, next) {
             res.render('register');
         }
         else {
-
+            // Create session
             sess = req.session;
-            sess.email = req.body.email; // equivalent to $_SESSION['email'] in PHP.
+            sess.email = req.body.email; 
             sess.username = req.body.username;
             res.redirect('/');
         }
