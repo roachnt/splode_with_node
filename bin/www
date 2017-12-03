@@ -33,10 +33,11 @@ var io = require('socket.io')(server);
 
 io.on('connection', function (socket) {
   console.log('Client connected!');
+  socket.join(socket.user);
   // Receive click coordinates from client
   socket.on('clickevent', function (click) {
     // Send click coordinates to client
-    io.emit('clickevent', click);
+    io.to(socket.user).emit('clickevent', click);
   });
 
   socket.on('disconnection', function (click) {
