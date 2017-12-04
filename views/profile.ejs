@@ -108,13 +108,14 @@
     <!-- Socket.io functionality -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        var channelID = Math.floor(Math.random() * 10);
         $(function () {
             // Connect
             var socket = io();
             // Assign this to pass to server and create room
-            console.log('<%= user.username %>');
-            socket.user = '<%= user.username %>';
-            console.log('Client connected!')
+            console.log(`${channelID}`);
+            socket.room = '<%=user.username%>';
+            console.log('Client connected!');
             // Pass click coordinates to server
             canvas.addEventListener('click', (e) => {
                 var click = { clientX: e.clientX, clientY: e.clientY };

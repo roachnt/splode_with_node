@@ -34,11 +34,13 @@ var io = require('socket.io')(server);
 io.on('connection', function (socket) {
   console.log('Client connected!');
   // Create a room for the user profile
-  socket.join(socket.user);
+  socket.join(socket.handshake.headers.referer);
+
   // Receive click coordinates from client
   socket.on('clickevent', function (click) {
     // Send click coordinates to client
-    io.to(socket.user).emit('clickevent', click);
+    //console.log(socket.room);
+    io.to(socket.handshake.headers.referer).emit('clickevent', click);
   });
 
   socket.on('disconnection', function (click) {
